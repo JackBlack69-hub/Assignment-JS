@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BST</title>
+  <style>
+    .tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .node {
+      border: 1px solid black;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 5px;
+      position: relative;
+    }
+
+    .level {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .line {
+      position: absolute;
+      width: 0;
+      height: 10px;
+      border-top: 1px solid black;
+    }
+
+    .line-left {
+      left: 0;
+      transform-origin: top left;
+      transform: translate(-50%, 0) rotate(-45deg);
+    }
+
+    .line-right {
+      right: 0;
+      transform-origin: top right;
+      transform: translate(50%, 0) rotate(45deg);
+    }
+  </style>
+</head>
+<body>
+  <h1>BST</h1>
+
+  <div>
+    <label for="inputArray">input array</label>
+    <input type="text" id="inputArray">
+    <button onclick="generateTree()">Submit</button>
+  </div>
+
+  <div id="treeContainer" class="tree"></div>
+
+  <script>
+    function generateTree() {
+      var inputArray = document.getElementById("inputArray").value;
+      var elements = inputArray.split(" ").map(Number);
+
+      
+      var tree = {};
+
+      
+      for (var i = 0; i < elements.length; i++) {
+        insertElement(tree, elements[i]);
+      }
+
+      // Clear the tree container
+      var treeContainer = document.getElementById("treeContainer");
+      treeContainer.innerHTML = "";
+
+      // Display the tree on the screen
+      displayTree(tree, treeContainer, 0, 0);
+    }
+
+    function insertElement(tree, value) {
+      if (tree.value === undefined) {
+        tree.value = value;
+        tree.left = {};
+        tree.right = {};
+      } else if (value < tree.value) {
+        insertElement(tree.left, value);
+      } else {
+        insertElement(tree.right, value);
+      }
+    }
+
+    function displayTree(tree, container, level, position) {
+      if (tree.value !== undefined) {
+        var node = document.createElement("div");
+        node.className = "node";
+        node.innerText = tree.value;
+        node.style.marginTop = level * 40 + "px";
+        node.style.left = position * 40 + "px";
+        container.appendChild(node);
+
+        if (tree.left.value !== undefined) {
+          var lineLeft = document.createElement("div");
+          lineLeft.className = "line line-left";
+          lineLeft.style.top = (level * 40 + 40) + "px";
+          lineLeft.style.width = (position * 40 + 20) + "px";
+          container.appendChild(lineLeft);
+
+          displayTree(tree.left, container, level + 1, position - Math.pow(2, level));
+        }
+
+        if (tree.right.value !== undefined) {
+          var lineRight = document.createElement("div");
+          lineRight.className = "line line-right";
+          lineRight.style.top = (level * 40 + 40) + "px";
+          lineRight.style.width = ((-position) * 40 + 20) + "px";
+          container.appendChild(lineRight);
+
+          displayTree(tree.right, container, level + 1, position + Math.pow(2, level));
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+
